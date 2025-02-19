@@ -1,5 +1,6 @@
 
 import * as basicLightbox from "basiclightbox";
+import { forEach } from "lodash";
 const combination = [
   [1, 2, 3],
   [4, 5, 6],
@@ -33,26 +34,18 @@ function handleClick(event) {
     // handleClick обробляє клік.. якщо ходить хрестик, то треба перед малюванням х або о перевірку
     // створимо флажок чи виграв гравець..
     // за замовченням   
-    let isWinner = "false"; 
+    let winningCombination = null;
     if (player === "X") {
         historyX.push(id);
-        isWinner = historyX.length >= 3 ? checkWinner(historyX) : false;        
+        winningCombination = historyX.length >= 3 ? checkWinner(historyX) : null;        
     } else {
         historyO.push(id);
-        isWinner = historyO.length >= 3 ? checkWinner(historyO) : false;
+        winningCombination = historyO.length >= 3 ? checkWinner(historyO) : null;
     };
-    if (isWinner) {
-        const instance = basicLightbox.create(
-            `<div class = "mbox">
-            <h1 class = "headText">
-            <p style = "font-size: 60px; margin: 0; padding: 0;">${player}</p>
-            <p>Is the winner!</p>
-            </h1>
-            </div>
-            `
-        );
-        instance.show();
-        resetGame();
+    event.target.textContent = player;
+    if (winningCombination) {
+        highlightWinningCombination(winningCombination);
+         setTimeout(() => showWinnerModal(player), 500);
         return;
     }
     if (historyO.length + historyX.length === 9) {
@@ -68,15 +61,32 @@ function handleClick(event) {
         resetGame();
         return;
     }
-    event.target.textContent = player;
+    // event.target.textContent = player;
     player = player === "X" ? "O" : "X";
 }
 function checkWinner(history) {
-    return combination.some(item => item.every((id) => history.includes(id)));
+     return combination.find(item => item.every(id => history.includes(id))) || null;
 }
 function resetGame() {
     createMarkup();
     player = "X";
     historyO.splice(0);
     historyX.splice(0);
+}
+function highlightWinningCombination(arr) {
+    arr.forEach((id) => {
+        document.querySelector(`[data-id = "${id}"]`).classList.add("win");
+    })
+}
+function showWinnerModal(winner) {
+    const instance = basicLightbox.create(`
+        <div class="mbox">
+            <h1 class="headText">
+                <p style="font-size: 60px; margin: 0; padding: 0;">${winner}</p>
+                <p>Is the winner!</p>
+            </h1>
+        </div>
+    `);
+    instance.show();
+    // setTimeout(resetGame, 2000);
 }
