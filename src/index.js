@@ -88,5 +88,5 @@ function showWinnerModal(winner) {
         </div>
     `);
     instance.show();
-    // setTimeout(resetGame, 2000);
+    setTimeout(resetGame, 6000);
 }
