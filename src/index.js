@@ -44,8 +44,8 @@ function handleClick(event) {
     };
     event.target.textContent = player;
     if (winningCombination) {
+        setTimeout(() => showWinnerModal(player), 1000);
         highlightWinningCombination(winningCombination);
-         setTimeout(() => showWinnerModal(player), 500);
         return;
     }
     if (historyO.length + historyX.length === 9) {
@@ -88,5 +88,9 @@ function showWinnerModal(winner) {
         </div>
     `);
     instance.show();
-    setTimeout(resetGame, 6000);
+    setTimeout(() => {
+        instance.close();
+        resetGame();
+	}, 2000);
+    
 }
