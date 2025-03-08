@@ -1,6 +1,6 @@
 
 import * as basicLightbox from "basiclightbox";
-import { forEach } from "lodash";
+// import { forEach } from "lodash";
 const combination = [
   [1, 2, 3],
   [4, 5, 6],
@@ -83,14 +83,14 @@ function showWinnerModal(winner) {
         <div class="mbox">
             <h1 class="headText">
                 <p style="font-size: 60px; margin: 0; padding: 0;">${winner}</p>
-                <p>Is the winner!</p>
+                <p>Is winner!</p>
             </h1>
         </div>
     `);
     instance.show();
+    resetGame();
     setTimeout(() => {
         instance.close();
-        resetGame();
 	}, 2000);
     
 }
